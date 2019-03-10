@@ -1,0 +1,270 @@
+<div *ngIf='!cardsClosed'>
+
+    <div id="au-cards">
+
+      <p style="clear:both"></p>
+
+      <div class="row row-spacer">
+
+        <div *ngFor="let c of cardModelArr; let i = index">
+          
+          <div class="col col-md-4">
+
+            
+              <div *ngIf='c.dbCardType == "DARFFAV" && seeMore'>
+              <div 
+                id="au-card"
+                class="card  shadow  h-100 see-more "
+                style="max-width: 18rem; background: yellow"
+              >
+               <div class="{{ c.headerClass }}">
+                    <h5>
+                      <span
+                        style="font-size: 14px;float:left;padding:3px;text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                      >
+                        &nbsp; {{ c.title }}
+                      </span>
+                      <span
+                        style="font-size: 14px;float:right;padding:3px;text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                      >
+                        {{ c.totalSummaryCnt }} &nbsp;&nbsp;&nbsp;&nbsp;
+                      </span>
+                    </h5>
+                <!-- header -->
+                </div>
+                <table>
+                    <tr *ngFor="let in of zeroCountArr; let i = index">
+                        <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
+                        <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
+                        <br />
+
+                        <td *ngIf='i.toString() == "2"' colspan='2' style="text-align: center;">
+                          See more card
+                        </td>
+                    </tr>
+
+                </table>
+                <div class="{{ c.footerClass }}">
+                    <span
+                      *ngIf="
+                        c.dbCardType.startsWith('PROCESS') ||
+                        c.dbCardType.startsWith('SHIP');
+                        else noDetail
+                      "
+                    >
+                      <button
+                        (click)="gridComponent.getGridData(c.dbCardType)"
+                        fragment='loading...'
+                        id="{{ c.dbCardType }}"
+                        class="au-button-white"
+                        data-toggle="tooltip"
+                        data-html="true"
+                        title="See Detail"
+                        style="text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                      >
+                        Detail
+                      </button>
+  
+                    </span>
+  
+                    <ng-template #noDetail>
+                      <button
+                        id="{{ c.dbCardType }}"
+                        class="au-button-disabled"
+                        disabled
+                        data-toggle="tooltip"
+                        data-html="true"
+                        title="No Detail Data"
+                      >
+                        Detail
+                      </button>
+                    </ng-template>
+  
+                    <button
+                      (click)="getOneCard(c.dbCardType)"
+                      fragment='loading...'
+                      id="{{ c.dbCardType }}"
+                      class="au-button-white"
+                      data-toggle="tooltip"
+                      data-html="true"
+                      title="Refresh Summary Data"
+                      style="text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                  >
+                    Refresh
+                  </button>
+
+                  <button *ngIf='c.dbCardType=="DARFFAV" '
+                    (click)='onSeeLess()'
+                    id="{{ c.dbCardType }}"
+                    class="au-button-white"
+                    data-toggle="tooltip"
+                    data-html="true"
+                    title="See More"
+                    style="text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                  >
+                    See Less: {{showDarffav}}
+                  </button>
+                
+                <!-- footer class -->
+                </div>
+                
+              <!-- card -->
+              </div>
+              <!-- ngif DARFFAV -->
+           </div>		
+
+            <div *ngIf='c.dbCardType != "DARFFAV" || c.dbCardType == "DARFFAV" &&  showDarffav'
+              id="au-card"
+              class="card  shadow  h-100 "
+              style="max-width: 18rem;"
+            >
+              <!-- inline css is used to override bootstrap defaults just to make fonts and such a hair nicer -->
+              <div class="{{ c.headerClass }}">
+                <h5>
+                  <span
+                    style="font-size: 14px;float:left;padding:3px;text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                  >
+                    &nbsp; {{ c.title }}
+                  </span>
+                  <span
+                    style="font-size: 14px;float:right;padding:3px;text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                  >
+                    {{ c.totalSummaryCnt }} &nbsp;&nbsp;&nbsp;&nbsp;
+                  </span>
+                </h5>
+              </div>
+
+              <div id="{{ c.dbCardType }}">
+                <div class="card-body text-primary">
+
+                  <div *ngIf='c.totalSummaryCnt > 0' style="overflow:hidden;">
+                    <!-- Index j indicated the row in the table while entry with index 0 and 1 are collumns-->
+                    <table *ngFor="let el of c.summary; let i = index">
+                      <tr *ngFor="let entry of getEntries(c.rowCount, el); let j = index">
+                        <td style="text-align: left;">
+                          {{ entry[0] }}
+                        </td>
+                        <td style="text-align: right;">
+                          {{ entry[1] }} &nbsp;&nbsp;
+                        </td>
+                      </tr>
+
+                      <!-- so that cards have same number of rows in the table -->
+
+                      <tr *ngFor="let in of emptyRows; let i = index">
+                        <td style="text-align: left;"></td>
+                        <td style="text-align: left;"></td>
+                        <br />
+                      </tr>
+
+                    </table>
+                  </div>
+            
+                  <div *ngIf='c.totalSummaryCnt === 0' style="overflow:hidden;">
+
+                      <table>
+                          <tr *ngFor="let in of zeroCountArr; let i = index">
+                              <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
+                              <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
+                              <br />
+
+                              <td *ngIf='i.toString() == "2"' colspan='2' style="text-align: center;">
+                                No Summary Data available
+                              </td>
+                          </tr>
+
+                      </table>
+                  </div>
+
+                </div>
+
+                <!-- Inline style is used to override bootstrap defaults to make fonts and such a hair nicer -->
+
+                <div class="{{ c.footerClass }}">
+                  <span
+                    *ngIf="
+                      c.dbCardType.startsWith('PROCESS') ||
+                      c.dbCardType.startsWith('SHIP');
+                      else noDetail
+                    "
+                  >
+                    <button
+                      (click)="gridComponent.getGridData(c.dbCardType)"
+                      fragment='loading...'
+                      id="{{ c.dbCardType }}"
+                      class="au-button-white"
+                      data-toggle="tooltip"
+                      data-html="true"
+                      title="See Detail"
+                      style="text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                    >
+                      Detail
+                    </button>
+
+                  </span>
+
+                  <ng-template #noDetail>
+                    <button
+                      id="{{ c.dbCardType }}"
+                      class="au-button-disabled"
+                      disabled
+                      data-toggle="tooltip"
+                      data-html="true"
+                      title="No Detail Data"
+                    >
+                      Detail
+                    </button>
+                  </ng-template>
+
+                  <button
+                    (click)="getOneCard(c.dbCardType)"
+                    fragment='loading...'
+                    id="{{ c.dbCardType }}"
+                    class="au-button-white"
+                    data-toggle="tooltip"
+                    data-html="true"
+                    title="Refresh Summary Data"
+                    style="text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                >
+                  Refresh
+                </button>
+
+           
+              
+                <button *ngIf='c.dbCardType=="DARFFAV" '
+                    (click)='onSeeMore()'
+                    id="{{ c.dbCardType }}"
+                    class="au-button-white"
+                    data-toggle="tooltip"
+                    data-html="true"
+                    title="See More"
+                    style="text-rendering: optimizeLegibility;text-shadow: 0.1em 0.1em 0.15em #01080e;"
+                >
+                    See More: {{showDarffav}} 
+                </button>
+      
+                <!-- footer  -->
+                </div>
+
+              <!-- single card -->
+              </div>
+
+            <!-- one col -->
+            </div>
+
+            <!-- ngFor -->
+          </div>
+
+          <!-- row for 3 cards -->
+        </div>
+
+        <!-- container -->
+      </div>
+
+      <p>&nbsp;</p>
+
+    </div>
+
+  </div>
+
+  <app-grids> </app-grids>
