@@ -125,6 +125,10 @@ a:link {
     padding: 2px;
     height: 17px;
   }
+
+  tr {
+    line-height: 14px;
+  }
   
   // tr:nth-child(odd){background-image: linear-gradient(to right,#F8F8F8, 	#d9ccff )};
   tr:nth-child(odd){

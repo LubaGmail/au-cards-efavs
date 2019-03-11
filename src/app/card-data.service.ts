@@ -83,24 +83,26 @@ export class CardDataService {
       headerClass: 'card-header text-center au-fav-header text-white',
       footerClass: 'card-footer text-center au-fav-footer text-white au-footer',
       buttonClass: 'badge badge-pill bg-success text-white',
-      totalSummaryCnt: 0,
+      totalSummaryCnt: 7,
       summary: [{
-       
+        zero: 9,
+        one: 9,
+        two: 23,
+        three: 4,
+        four: 42,
+        five: 20,
+        six: 42,
+        seven: 9,
+        eight: 23,
+        nine: 4,
+        ten: 9,
+        eleven: 9,
+        twelve: 23,
+        thirteen: 4,
+        fourteen: 5
       }]
     }
-
   ];
-
-  data = {
-    code: 42,
-    items: [{
-        id: 1,
-        name: 'foo'
-    }, {
-        id: 2,
-        name: 'bar'
-    }]
-  };
-
+  
 }
 

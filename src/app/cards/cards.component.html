@@ -9,8 +9,8 @@
         <div *ngFor="let c of cardModelArr; let i = index">
           
           <div class="col col-md-4">
-
             
+              <!-- see more -->
               <div *ngIf='c.dbCardType == "DARFFAV" && seeMore'>
               <div 
                 id="au-card"
@@ -32,18 +32,30 @@
                     </h5>
                 <!-- header -->
                 </div>
-                <table>
-                    <tr *ngFor="let in of zeroCountArr; let i = index">
-                        <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
-                        <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
-                        <br />
+                <table *ngFor="let el of c.summary; let i = index">
 
-                        <td *ngIf='i.toString() == "2"' colspan='2' style="text-align: center;">
-                          See more card
+                    <tr *ngFor="let entry of getEntries(c.rowCount, el); let j = index">
+                        {{c.rowCount}} | {{j}}
+                   
+                        <td style="text-align: left;">
+                          {{ entry[0] }}
                         </td>
+                        <td style="text-align: right;">
+                          {{ entry[1] }} &nbsp;&nbsp;
+                        </td>
+             
+
                     </tr>
 
-                </table>
+                    <!-- so that cards have same number of rows in the table -->
+
+                    <tr *ngFor="let in of emptyRows; let i = index">
+                      <td style="text-align: left;"></td>
+                      <td style="text-align: left;"></td>
+                      <br />
+                    </tr>
+
+                  </table>
                 <div class="{{ c.footerClass }}">
                     <span
                       *ngIf="
@@ -140,13 +152,18 @@
                   <div *ngIf='c.totalSummaryCnt > 0' style="overflow:hidden;">
                     <!-- Index j indicated the row in the table while entry with index 0 and 1 are collumns-->
                     <table *ngFor="let el of c.summary; let i = index">
+
                       <tr *ngFor="let entry of getEntries(c.rowCount, el); let j = index">
-                        <td style="text-align: left;">
-                          {{ entry[0] }}
-                        </td>
-                        <td style="text-align: right;">
-                          {{ entry[1] }} &nbsp;&nbsp;
-                        </td>
+
+                        <ng-container *ngIf='j < maxRows'> {{j}}
+                          <td style="text-align: left;">
+                            {{ entry[0] }}
+                          </td>
+                          <td style="text-align: right;">
+                            {{ entry[1] }} &nbsp;&nbsp;
+                          </td>
+                      </ng-container> 
+
                       </tr>
 
                       <!-- so that cards have same number of rows in the table -->
@@ -164,11 +181,11 @@
 
                       <table>
                           <tr *ngFor="let in of zeroCountArr; let i = index">
-                              <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
-                              <td *ngIf='i.toString() !== "2"' style="text-align: left;"></td>
+                              <td *ngIf='i.toString() !== "3"' style="text-align: left;"></td>
+                              <td *ngIf='i.toString() !== "3"' style="text-align: left;"></td>
                               <br />
 
-                              <td *ngIf='i.toString() == "2"' colspan='2' style="text-align: center;">
+                              <td *ngIf='i.toString() == "3"' colspan='2' style="text-align: center;">
                                 No Summary Data available
                               </td>
                           </tr>
@@ -228,8 +245,6 @@
                 >
                   Refresh
                 </button>
-
-           
               
                 <button *ngIf='c.dbCardType=="DARFFAV" '
                     (click)='onSeeMore()'

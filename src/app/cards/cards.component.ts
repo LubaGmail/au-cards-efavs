@@ -24,7 +24,7 @@ export class CardsComponent implements OnInit, OnDestroy {
   entries = [];
   emptyRows: Array<number> = [];
 
-  maxRows = 7;
+  maxRows = 8;
   zeroCountArr = [];
   seeMore: Boolean = false;
   showDarffav: Boolean = true;
@@ -44,7 +44,6 @@ export class CardsComponent implements OnInit, OnDestroy {
   // Load raw JSON array into an array of CardModel objects
   //
   loadCardData() {
-    
     this.cardModelArr = [];
 
     this.cards.forEach(card => {
